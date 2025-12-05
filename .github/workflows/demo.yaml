@@ -50,7 +50,7 @@ jobs:
 
       - name: Scan Project with Trivy and Generate Report
         id: trivy_scan
-        run: trivy . --format json --output trivy-report.json
+        run: trivy fs . --format json > trivy-report.json
 
       - name: Upload Trivy Report Artifact
         uses: actions/upload-artifact@v4
