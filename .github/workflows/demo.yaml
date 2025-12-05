@@ -43,7 +43,7 @@ jobs:
           grype version
 
       - name: Scan image docker with Trivy
-        run: trivy demo-core-nlp:latest
+        run: trivy image demo-core-nlp:latest
 
       - name: Scan image docker with Grype
         run: grype demo-core-nlp:latest
