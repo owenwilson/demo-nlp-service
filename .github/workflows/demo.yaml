@@ -18,6 +18,9 @@ jobs:
   Scan-vulnerabilities:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Build image docker
         run : docker build -t demo-core-nlp:latest .
 
