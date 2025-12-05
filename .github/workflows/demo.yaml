@@ -15,15 +15,15 @@ jobs:
       - name: Demo
         run: echo "java project"
 
+  Scan-vulnerabilities:
+    runs-on: ubuntu-latest
+    steps:
       - name: Build image docker
         run : docker build -t demo-core-nlp:latest .
 
       - name: Verify image docker
         run: docker images
 
-  Scan-vulnerabilities:
-    runs-on: ubuntu-latest
-    steps:
       - name: Install trivy
         run: |
           sudo apt-get update
