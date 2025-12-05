@@ -16,6 +16,7 @@ jobs:
         run: echo "java project"
 
   Scan-vulnerabilities:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -61,7 +62,7 @@ jobs:
 
       - name: Scan Docker Image with Grype and Generate Report
         id: grype_scan
-        run: grype demo-nlp:latest --scope all-layers --output json > grype-report.json
+        run: grype demo-core-nlp:latest --scope all-layers --output json > grype-report.json
 
       - name: Upload Grype Report Artifact
         uses: actions/upload-artifact@v4
@@ -71,12 +72,14 @@ jobs:
           retention-days: 7
 
   Scan-code:
+    needs: Scan-vulnerabilities
     runs-on: ubuntu-latest
     steps:
       - name: SonarQube Scan (Placeholder)
         run: echo "SonarQube Scan"
 
   Deploy:
+    needs: Scan-code
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
