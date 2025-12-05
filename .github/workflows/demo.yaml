@@ -21,6 +21,9 @@ jobs:
       - name: Verify image docker
         run: docker images
 
+  Scan-vulnerabilities:
+    runs-on: ubuntu-latest
+    steps:
       - name: Install trivy
         run: |
           sudo apt-get update
@@ -35,3 +38,43 @@ jobs:
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin
           grype version
+
+      - name: Scan image docker with Trivy
+        run: trivy demo-core-nlp:latest
+
+      - name: Scan image docker with Grype
+        run: grype demo-core-nlp:latest
+
+      - name: Scan Project with Trivy and Generate Report
+        id: trivy_scan
+        run: trivy . --format json --output trivy-report.json
+
+      - name: Upload Trivy Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-security-report
+          path: trivy-report.json
+          retention-days: 7
+
+      - name: Scan Docker Image with Grype and Generate Report
+        id: grype_scan
+        run: grype demo-nlp:latest --scope all-layers --output json > grype-report.json
+
+      - name: Upload Grype Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: grype-security-report
+          path: grype-report.json
+          retention-days: 7
+
+  Scan-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SonarQube Scan (Placeholder)
+        run: echo "SonarQube Scan"
+
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo "Deploy"
